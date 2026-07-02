@@ -1,0 +1,8 @@
+Flask>=3.0.0
+Werkzeug>=3.0.0
+pandas>=2.0.0
+rapidfuzz>=3.0.0
+openpyxl>=3.1.0
+xlsxwriter>=3.1.0
+scipy>=1.11.0
+pywebview>=5.0.0

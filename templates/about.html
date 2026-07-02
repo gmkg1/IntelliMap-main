@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>About Us - Ethorx</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&amp;family=Inter:wght@400&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#e1d4fd",
+                        "on-secondary-container": "#645a7d",
+                        "surface-dim": "#ded8e0",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "background": "#fdf7ff",
+                        "outline": "#7a7582",
+                        "tertiary": "#765b00",
+                        "surface-container-highest": "#e6e0e9",
+                        "surface-container": "#f2ecf4",
+                        "secondary": "#63597c",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "on-primary-fixed": "#22005d",
+                        "on-tertiary-container": "#503d00",
+                        "on-surface": "#1d1b20",
+                        "primary-fixed-dim": "#cfbcff",
+                        "inverse-primary": "#cfbcff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#4f378a",
+                        "surface": "#fdf7ff",
+                        "secondary-fixed-dim": "#cdc0e9",
+                        "surface-tint": "#6750a4",
+                        "on-surface-variant": "#494551",
+                        "on-primary": "#ffffff",
+                        "primary": "#4f378a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#e7c365",
+                        "tertiary-fixed": "#ffdf93",
+                        "tertiary-container": "#c9a74d",
+                        "surface-container-high": "#ece6ee",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#e0d2ff",
+                        "primary-fixed": "#e9ddff",
+                        "inverse-on-surface": "#f5eff7",
+                        "on-secondary-fixed": "#1f1635",
+                        "inverse-surface": "#322f35",
+                        "secondary-fixed": "#e9ddff",
+                        "surface-container-low": "#f8f2fa",
+                        "on-background": "#1d1b20",
+                        "on-secondary-fixed-variant": "#4b4263",
+                        "surface-variant": "#e6e0e9",
+                        "surface-bright": "#fdf7ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#241a00",
+                        "primary-container": "#6750a4",
+                        "outline-variant": "#cbc4d2",
+                        "on-error": "#ffffff",
+                        "success": "#28a745"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "margin": "32px",
+                        "lg": "48px",
+                        "gutter": "24px",
+                        "xl": "64px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 8px 24px rgba(102, 126, 234, 0.15);
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #4f378a, #6750a4);
+        }
+        /* Technical Mesh Grid Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(103, 80, 164, 0.06) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(103, 80, 164, 0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+        }
+        .stagger-1 { animation-delay: 100ms; }
+        .stagger-2 { animation-delay: 250ms; }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen">
+
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-h-screen">
+    <!-- Beautiful Floating NavBar -->
+    <header class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-50 transition-all duration-300">
+        <div class="bg-surface/95 dark:bg-surface-container/95 backdrop-blur-xl border-2 border-primary/20 rounded-2xl shadow-[0_12px_40px_rgb(79,55,138,0.15)] flex justify-between items-center px-4 py-3 md:px-6">
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="bg-gradient-to-br from-primary to-secondary w-10 h-10 rounded-xl flex items-center justify-center shadow-inner group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
+                    <span class="material-symbols-outlined text-white">map</span>
+                </div>
+                <span class="font-display-lg text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-tight">Ethorx</span>
+            </div>
+            
+            <nav class="hidden md:flex gap-2 items-center bg-surface-container-low/80 p-1.5 rounded-xl border border-outline-variant/30">
+                <a class="px-5 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-on-surface-variant hover:bg-surface hover:shadow-sm hover:text-primary" href="{{ url_for('index') }}">Workspace</a>
+                <a class="px-5 py-2 rounded-lg font-medium text-sm transition-all duration-300 bg-surface shadow-sm text-primary font-bold" href="{{ url_for('about') }}">About Us</a>
+            </nav>
+            
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl border border-primary/20 hover:border-primary transition-colors cursor-pointer hidden md:flex items-center justify-center bg-surface-container text-primary shadow-sm hover:bg-primary hover:text-white">
+                    <span class="material-symbols-outlined text-[20px]">person</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main About Us Content -->
+    <main class="flex-1 p-margin md:p-xl flex flex-col gap-xl max-w-[1200px] mx-auto w-full pt-28 md:pt-32">
+        <!-- Hero Header -->
+        <section class="flex flex-col gap-2 items-center text-center mt-8 animate-fade-in-up stagger-1">
+            <h1 class="font-display-lg text-display-lg text-on-surface">About Ethorx</h1>
+            <p class="font-headline-sm text-headline-sm text-on-surface-variant mt-4 max-w-2xl">Industrial-grade accuracy, privacy-first data mapping</p>
+        </section>
+
+        <!-- Content Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mt-8 animate-fade-in-up stagger-2">
+            <!-- Mission Card -->
+            <div class="bg-surface-bright border border-outline-variant rounded-lg p-xl flex flex-col gap-4 shadow-sm hover-lift relative overflow-hidden md:col-span-2">
+                <div class="absolute top-0 left-0 w-full h-1 gradient-btn"></div>
+                <div class="flex items-center gap-3 text-primary mb-2">
+                    <span class="material-symbols-outlined text-4xl">flag</span>
+                    <h2 class="font-headline-md text-headline-md font-bold">Our Mission</h2>
+                </div>
+                <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    Ethorx was built to solve a common problem: transforming messy, unstructured data into clean, usable templates without sacrificing privacy or relying on unpredictable AI models.
+                </p>
+            </div>
+
+            <!-- Why Choose Ethorx -->
+            <div class="bg-surface-container-low border border-outline-variant rounded-lg p-xl flex flex-col gap-6 shadow-sm relative overflow-hidden">
+                <div class="flex items-center gap-3 text-secondary mb-2">
+                    <span class="material-symbols-outlined text-4xl">verified_user</span>
+                    <h2 class="font-headline-md text-headline-md font-bold">Why Choose Ethorx?</h2>
+                </div>
+                <ul class="flex flex-col gap-4 font-body-lg text-body-lg text-on-surface-variant">
+                    <li class="flex gap-3">
+                        <span class="material-symbols-outlined text-success">lock</span>
+                        <span><strong class="text-on-surface">Privacy First:</strong> Your data never leaves your environment permanently. We process files in isolated sessions and destroy them immediately after transformation.</span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="material-symbols-outlined text-primary">psychology_alt</span>
+                        <span><strong class="text-on-surface">No AI Hallucinations:</strong> We use deterministic algorithms (fuzzy matching and semantic pattern detection) ensuring 100% predictable and reproducible results.</span>
+                    </li>
+                    <li class="flex gap-3">
+                        <span class="material-symbols-outlined text-tertiary">factory</span>
+                        <span><strong class="text-on-surface">Industrial Grade:</strong> Built for performance, Ethorx can handle large datasets efficiently and accurately.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- How It Works -->
+            <div class="bg-surface-container-low border border-outline-variant rounded-lg p-xl flex flex-col gap-6 shadow-sm relative overflow-hidden">
+                <div class="flex items-center gap-3 text-tertiary mb-2">
+                    <span class="material-symbols-outlined text-4xl">auto_awesome</span>
+                    <h2 class="font-headline-md text-headline-md font-bold">How It Works</h2>
+                </div>
+                <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    Simply upload your raw data and your desired template. Ethorx analyzes column names and data patterns to suggest optimal mappings. You remain in control, adjusting any mapping before the final transformation.
+                </p>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

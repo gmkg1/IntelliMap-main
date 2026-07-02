@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Ethorx Workspace</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&amp;family=Inter:wght@400&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#e1d4fd",
+                        "on-secondary-container": "#645a7d",
+                        "surface-dim": "#ded8e0",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "background": "#fdf7ff",
+                        "outline": "#7a7582",
+                        "tertiary": "#765b00",
+                        "surface-container-highest": "#e6e0e9",
+                        "surface-container": "#f2ecf4",
+                        "secondary": "#63597c",
+                        "on-tertiary-fixed-variant": "#594400",
+                        "on-primary-fixed": "#22005d",
+                        "on-tertiary-container": "#503d00",
+                        "on-surface": "#1d1b20",
+                        "primary-fixed-dim": "#cfbcff",
+                        "inverse-primary": "#cfbcff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#4f378a",
+                        "surface": "#fdf7ff",
+                        "secondary-fixed-dim": "#cdc0e9",
+                        "surface-tint": "#6750a4",
+                        "on-surface-variant": "#494551",
+                        "on-primary": "#ffffff",
+                        "primary": "#4f378a",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#e7c365",
+                        "tertiary-fixed": "#ffdf93",
+                        "tertiary-container": "#c9a74d",
+                        "surface-container-high": "#ece6ee",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#e0d2ff",
+                        "primary-fixed": "#e9ddff",
+                        "inverse-on-surface": "#f5eff7",
+                        "on-secondary-fixed": "#1f1635",
+                        "inverse-surface": "#322f35",
+                        "secondary-fixed": "#e9ddff",
+                        "surface-container-low": "#f8f2fa",
+                        "on-background": "#1d1b20",
+                        "on-secondary-fixed-variant": "#4b4263",
+                        "surface-variant": "#e6e0e9",
+                        "surface-bright": "#fdf7ff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#241a00",
+                        "primary-container": "#6750a4",
+                        "outline-variant": "#cbc4d2",
+                        "on-error": "#ffffff",
+                        "success": "#28a745"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "margin": "32px",
+                        "lg": "48px",
+                        "gutter": "24px",
+                        "xl": "64px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "headline-sm": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 8px 24px rgba(102, 126, 234, 0.15);
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #4f378a, #6750a4);
+        }
+        .upload-zone {
+            transition: all 0.2s ease;
+        }
+        .upload-zone:hover {
+            background-color: rgba(103, 80, 164, 0.05);
+            border-color: #4f378a;
+        }
+        .hidden-visually {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        /* Technical Mesh Grid Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(103, 80, 164, 0.06) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(103, 80, 164, 0.06) 1px, transparent 1px);
+            background-size: 32px 32px;
+            mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            opacity: 0;
+        }
+        .app-loaded .animate-fade-in-up {
+            animation: fadeInUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        
+        /* Preloader Styles */
+        #preloader {
+            transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+        }
+        .preloader-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        /* Data Whirlpool */
+        .whirlpool-core {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(122,90,248,0.8) 0%, transparent 70%);
+            box-shadow: 0 0 60px #7a5af8, inset 0 0 40px #cfbcff;
+            animation: pulseCore 1.5s ease-in-out infinite alternate;
+        }
+        .whirlpool-container {
+            position: relative;
+            width: 600px; height: 600px;
+            animation: spinWhirlpool 4s linear infinite;
+        }
+        .data-particle {
+            position: absolute;
+            top: 50%; left: 50%;
+            color: #cfbcff;
+            font-size: 72px !important;
+            animation: suckIn 1.2s cubic-bezier(0.5, 0, 0.8, 1) infinite;
+            animation-delay: var(--delay);
+            opacity: 0; 
+        }
+
+        @keyframes spinWhirlpool { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        @keyframes suckIn {
+            0% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-700px) scale(2); 
+            }
+            15% { 
+                opacity: 0.8; 
+            }
+            100% { 
+                opacity: 0; 
+                transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0px) scale(0); 
+            }
+        }
+        @keyframes pulseCore {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+        }
+        
+        @keyframes expandDown {
+            from { opacity: 0; max-height: 0; transform: translateY(-10px); }
+            to { opacity: 1; max-height: 2500px; transform: translateY(0); }
+        }
+        .animate-expand-down {
+            animation: expandDown 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            overflow: hidden;
+            display: flex !important;
+        }
+
+        .drag-active {
+            border-color: #6750a4 !important;
+            background-color: rgba(103, 80, 164, 0.1) !important;
+            transform: scale(1.02);
+            box-shadow: 0 0 0 4px rgba(103, 80, 164, 0.2);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-move {
+            background-size: 200% 200%;
+            animation: gradientMove 4s ease infinite;
+        }
+        
+        .stagger-1 { animation-delay: 100ms; }
+        .stagger-2 { animation-delay: 250ms; }
+        .stagger-3 { animation-delay: 400ms; }
+        .stagger-4 { animation-delay: 550ms; }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen relative overflow-x-hidden">
+<script>
+    // Prevent preloader flash on re-navigation
+    if (sessionStorage.getItem('appBooted')) {
+        document.body.classList.add('app-loaded');
+        // Inject style to hide loader immediately before paint
+        const style = document.createElement('style');
+        style.innerHTML = '#preloader { display: none !important; }';
+        document.head.appendChild(style);
+    }
+</script>
+<!-- Cinematic Preloader -->
+<div id="preloader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-surface/95 dark:bg-surface-container/95 backdrop-blur-2xl">
+    <div class="whirlpool-container mb-8" id="whirlpool-container">
+        <div class="whirlpool-core"></div>
+        <!-- Particles generated by JS -->
+    </div>
+    
+    <div class="flex flex-col items-center gap-2 text-center w-full max-w-xs">
+        <h2 class="font-display-lg text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary via-[#cfbcff] to-primary">
+            <span id="loader-percentage">0</span>%
+        </h2>
+        <div class="w-full h-1 bg-surface-container rounded-full overflow-hidden mt-1">
+            <div id="loader-progress-bar" class="h-full bg-gradient-to-r from-primary to-secondary w-0 transition-all duration-[50ms]"></div>
+        </div>
+        <p id="loader-status" class="font-mono text-sm text-[#7a5af8] mt-3 font-bold tracking-widest uppercase h-5">Initializing Core...</p>
+    </div>
+</div>
+
+<!-- Interactive Ambient Mouse Glow -->
+<div id="mouse-glow" class="pointer-events-none fixed inset-0 z-[-1] transition-opacity duration-300 hidden md:block"></div>
+
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-h-screen">
+    <!-- Beautiful Floating NavBar -->
+    <header class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1200px] z-50 transition-all duration-300">
+        <div class="bg-surface/95 dark:bg-surface-container/95 backdrop-blur-xl border-2 border-primary/20 rounded-2xl shadow-[0_12px_40px_rgb(79,55,138,0.15)] flex justify-between items-center px-4 py-3 md:px-6">
+            <div class="flex items-center gap-3 group cursor-pointer">
+                <div class="bg-gradient-to-br from-primary to-secondary w-10 h-10 rounded-xl flex items-center justify-center shadow-inner group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
+                    <span class="material-symbols-outlined text-white">map</span>
+                </div>
+                <span class="font-display-lg text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary tracking-tight">Ethorx</span>
+            </div>
+            
+            <nav class="hidden md:flex gap-2 items-center bg-surface-container-low/80 p-1.5 rounded-xl border border-outline-variant/30">
+                <a class="px-5 py-2 rounded-lg font-medium text-sm transition-all duration-300 bg-surface shadow-sm text-primary font-bold" href="{{ url_for('index') }}">Workspace</a>
+                <a class="px-5 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-on-surface-variant hover:bg-surface hover:shadow-sm hover:text-primary" href="{{ url_for('about') }}">About Us</a>
+            </nav>
+            
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl border border-primary/20 hover:border-primary transition-colors cursor-pointer hidden md:flex items-center justify-center bg-surface-container text-primary shadow-sm hover:bg-primary hover:text-white">
+                    <span class="material-symbols-outlined text-[20px]">person</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Canvas -->
+    <main class="flex-1 p-margin md:p-xl flex flex-col gap-xl max-w-[1200px] mx-auto w-full pt-28 md:pt-32">
+        <!-- Hero Header with Thin Glass Border -->
+        <div class="animate-fade-in-up stagger-1 mb-6 w-full lg:w-fit">
+            <section class="relative p-[1px] rounded-3xl bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-move shadow-[0_12px_40px_rgb(79,55,138,0.15)]">
+                <!-- Inner Glass Container -->
+                <div class="bg-surface/90 dark:bg-surface-container/95 backdrop-blur-2xl rounded-[calc(1.5rem-1px)] p-6 md:p-8 flex flex-col gap-3 h-full">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 w-fit hover:bg-primary/20 transition-colors cursor-default">
+                        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                        <span class="text-xs font-bold text-primary tracking-wider uppercase font-label-caps">Local Engine Active</span>
+                    </div>
+                    <h2 class="font-display-lg text-5xl md:text-6xl font-extrabold tracking-tight">
+                        <span class="text-on-surface">Data Mapping</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-[#7a5af8] to-secondary relative">
+                            Workspace
+                            <svg class="absolute -bottom-2 left-0 w-full h-3 text-primary/30" viewBox="0 0 100 20" preserveAspectRatio="none">
+                                <path d="M0,10 Q50,20 100,10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                    </h2>
+                    <div class="flex items-center gap-3 text-on-surface-variant font-label-caps text-label-caps mt-2 flex-wrap">
+                        <span class="bg-surface-container px-2 py-1 rounded border border-outline-variant/30">Privacy-first</span>
+                        <span class="text-outline hidden sm:block">•</span>
+                        <span class="bg-surface-container px-2 py-1 rounded border border-outline-variant/30">No AI</span>
+                        <span class="text-outline hidden sm:block">•</span>
+                        <span class="bg-surface-container px-2 py-1 rounded border border-outline-variant/30">No data storage</span>
+                        <span class="text-outline hidden sm:block">•</span>
+                        <span class="bg-surface-container px-2 py-1 rounded border border-outline-variant/30 text-primary font-bold">Industrial-grade accuracy</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Upload Section & Privacy/Settings Box -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter animate-fade-in-up stagger-2">
+            <!-- 2-Column Upload (Takes 2/3 space) -->
+            <section class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-gutter">
+                <!-- Raw Data Upload -->
+                <div class="bg-surface-bright border border-outline-variant rounded-lg p-md flex flex-col gap-4 shadow-sm hover-lift relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 gradient-btn"></div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">data_object</span> Raw Data
+                    </h3>
+                    <label for="raw-file" class="upload-zone border-2 border-dashed border-outline-variant rounded-lg p-margin flex flex-col items-center justify-center text-center cursor-pointer h-48 bg-surface-container-lowest">
+                        <span class="material-symbols-outlined text-4xl text-outline mb-2">upload_file</span>
+                        <p class="font-body-md text-body-md text-on-surface-variant" id="raw-file-name">Drag &amp; drop CSV/XLSX here</p>
+                        <p class="font-label-caps text-label-caps text-outline mt-2">or click to browse</p>
+                        <input type="file" id="raw-file" accept=".csv, .xlsx, .xls, .json" class="hidden-visually">
+                    </label>
+                </div>
+                
+                <!-- Template Upload -->
+                <div class="bg-surface-bright border border-outline-variant rounded-lg p-md flex flex-col gap-4 shadow-sm hover-lift relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-secondary"></div>
+                    <h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-secondary">view_list</span> Template
+                    </h3>
+                    <label for="template-file" class="upload-zone border-2 border-dashed border-outline-variant rounded-lg p-margin flex flex-col items-center justify-center text-center cursor-pointer h-48 bg-surface-container-lowest">
+                        <span class="material-symbols-outlined text-4xl text-outline mb-2">note_add</span>
+                        <p class="font-body-md text-body-md text-on-surface-variant" id="template-file-name">Drag &amp; drop Target Schema</p>
+                        <p class="font-label-caps text-label-caps text-outline mt-2">or click to browse</p>
+                        <input type="file" id="template-file" accept=".csv, .xlsx, .xls, .json" class="hidden-visually">
+                    </label>
+                </div>
+            </section>
+
+            <!-- Privacy & Settings Sidebox (Takes 1/3 space) -->
+            <section class="lg:col-span-1 flex flex-col gap-gutter">
+                <div class="bg-surface-container-low border border-outline-variant rounded-lg p-md flex flex-col gap-4 relative overflow-hidden shadow-sm flex-1">
+                    <div class="absolute -right-4 -top-4 opacity-5">
+                        <span class="material-symbols-outlined text-[120px]">shield_lock</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-primary">
+                        <span class="material-symbols-outlined">security</span>
+                        <h3 class="font-headline-sm text-headline-sm font-bold">Privacy First Mandate</h3>
+                    </div>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant mt-2 leading-relaxed">
+                        Your data is <strong class="text-on-surface">NEVER</strong> stored!<br/>
+                        Raw data stays entirely within your local browser session. Mappings are processed client-side.
+                    </p>
+                </div>
+                <div class="bg-surface-container-low border border-outline-variant rounded-lg p-md flex flex-col gap-4 shadow-sm flex-1">
+                    <div class="flex items-center gap-2 text-primary mb-2">
+                        <span class="material-symbols-outlined">settings</span>
+                        <h3 class="font-headline-sm text-headline-sm font-bold">Settings</h3>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="username" class="font-label-caps text-label-caps text-outline">Your Name / User ID</label>
+                        <input type="text" id="username" class="bg-surface border border-outline-variant rounded p-2 text-on-surface focus:border-primary outline-none" placeholder="For audit logs">
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <label for="output-format" class="font-label-caps text-label-caps text-outline">Output Format</label>
+                        <select id="output-format" class="bg-surface border border-outline-variant rounded p-2 text-on-surface focus:border-primary outline-none">
+                            <option value="csv">CSV</option>
+                            <option value="excel" selected>Excel</option>
+                            <option value="json">JSON</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Action Area -->
+        <section class="flex flex-col items-center justify-center py-sm gap-4 animate-fade-in-up stagger-3">
+            <button id="auto-map-btn" disabled class="gradient-btn text-on-primary px-xl py-4 rounded-full hover-lift font-headline-sm text-headline-sm flex items-center gap-3 shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95">
+                <span class="material-symbols-outlined">rocket_launch</span> Auto-Map Fields
+            </button>
+            <div id="loading-spinner" class="hidden">
+                <span class="material-symbols-outlined animate-spin text-primary text-4xl">sync</span>
+            </div>
+            <div id="status-message" class="text-sm font-medium font-body-md text-on-surface-variant"></div>
+        </section>
+
+        <!-- Review and Adjust Mappings List -->
+        <section id="mapping-section" class="bg-surface-bright border border-outline-variant rounded-lg overflow-hidden shadow-sm flex flex-col hidden">
+            <div class="p-md border-b border-outline-variant bg-surface-container-lowest flex justify-between items-center">
+                <h3 class="font-headline-sm text-headline-sm text-on-surface">Review and Adjust Mappings</h3>
+                <div class="flex gap-2">
+                    <span class="font-label-caps text-label-caps text-outline bg-surface-container px-2 py-1 rounded" id="mapped-count">0/0</span>
+                    <span class="font-label-caps text-label-caps text-success bg-success/10 px-2 py-1 rounded border border-success/20">Auto Mapped</span>
+                </div>
+            </div>
+            
+            <div id="contamination-warning" class="bg-error-container/20 text-on-error-container p-4 border-b border-error-container hidden text-sm font-medium"></div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-surface-container-low font-label-caps text-label-caps text-outline">
+                            <th class="p-4 border-b border-outline-variant font-medium">Template Column (Target)</th>
+                            <th class="p-4 border-b border-outline-variant font-medium">Raw Column Match (Source)</th>
+                            <th class="p-4 border-b border-outline-variant font-medium text-center">Confidence</th>
+                            <th class="p-4 border-b border-outline-variant font-medium text-right">Data Pattern</th>
+                        </tr>
+                    </thead>
+                    <tbody class="font-body-md text-body-md text-on-surface" id="mapping-list">
+                        <!-- JS Injected rows -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-end">
+                <button id="transform-btn" class="gradient-btn text-on-primary px-xl py-3 rounded-full hover-lift font-headline-sm text-headline-sm flex items-center gap-3 shadow-md">
+                    ✨ Transform Data
+                </button>
+            </div>
+        </section>
+        
+        <!-- Download Section -->
+        <section id="download-section" class="bg-surface-bright border border-outline-variant rounded-lg overflow-hidden shadow-sm flex flex-col hidden mb-8">
+            <div class="p-md border-b border-outline-variant bg-surface-container-lowest">
+                <h3 class="font-headline-sm text-headline-sm text-on-surface">📊 Transformation Complete</h3>
+            </div>
+            <div class="p-md grid grid-cols-1 md:grid-cols-3 gap-4 bg-surface-container-lowest">
+                <div class="bg-surface-container-low p-4 rounded-lg text-center border border-outline-variant">
+                    <span class="block text-2xl font-bold text-primary" id="total-rows">0</span>
+                    <span class="font-label-caps text-label-caps text-outline">Total Rows</span>
+                </div>
+                <div class="bg-surface-container-low p-4 rounded-lg text-center border border-outline-variant">
+                    <span class="block text-2xl font-bold text-primary" id="total-cols">0</span>
+                    <span class="font-label-caps text-label-caps text-outline">Total Columns</span>
+                </div>
+                <div class="bg-surface-container-low p-4 rounded-lg text-center border border-outline-variant">
+                    <span class="block text-2xl font-bold text-primary" id="completeness">0%</span>
+                    <span class="font-label-caps text-label-caps text-outline">Completeness</span>
+                </div>
+            </div>
+            <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-center">
+                <a id="download-link" href="#" class="gradient-btn text-on-primary px-xl py-3 rounded-full hover-lift font-headline-sm text-headline-sm flex items-center gap-3 shadow-md no-underline">
+                    ⬇️ Download Data
+                </a>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    window.SESSION_ID = "{{ session.session_id if session and 'session_id' in session else '' }}";
+</script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+    // Add small UX improvement to show selected file name
+    document.getElementById('raw-file').addEventListener('change', function(e) {
+        const nameElement = document.getElementById('raw-file-name');
+        if (this.files && this.files.length > 0) {
+            nameElement.textContent = this.files[0].name;
+            nameElement.classList.add('text-primary', 'font-semibold');
+        } else {
+            nameElement.textContent = 'Drag & drop CSV/XLSX here';
+            nameElement.classList.remove('text-primary', 'font-semibold');
+        }
+    });
+
+    document.getElementById('template-file').addEventListener('change', function(e) {
+        const nameElement = document.getElementById('template-file-name');
+        if (this.files && this.files.length > 0) {
+            nameElement.textContent = this.files[0].name;
+            nameElement.classList.add('text-primary', 'font-semibold');
+        } else {
+            nameElement.textContent = 'Drag & drop Target Schema here';
+            nameElement.classList.remove('text-primary', 'font-semibold');
+        }
+    });
+
+    // Interactive Ambient Mouse Glow Effect
+    document.addEventListener('DOMContentLoaded', () => {
+        const glow = document.getElementById('mouse-glow');
+        if (glow) {
+            window.addEventListener('mousemove', (e) => {
+                const x = e.clientX;
+                const y = e.clientY;
+                // Creates a soft purple aura tracking the cursor
+                glow.style.background = `radial-gradient(800px circle at ${x}px ${y}px, rgba(122, 90, 248, 0.12), transparent 40%)`;
+            });
+        }
+    });
+
+    // Cinematic Preloader Logic
+    window.addEventListener('load', () => {
+        const preloader = document.getElementById('preloader');
+        
+        // Only run preloader once per session (startup)
+        if (sessionStorage.getItem('appBooted')) {
+            preloader.style.display = 'none';
+            document.body.classList.add('app-loaded');
+            return;
+        }
+        
+        sessionStorage.setItem('appBooted', 'true');
+
+        // Generate 100 particles
+        const container = document.getElementById('whirlpool-container');
+        const icons = ['database', 'schema', 'folder', 'table', 'data_object', 'hub', 'analytics', 'account_tree', 'description', 'settings_ethernet'];
+        for (let i = 0; i < 100; i++) {
+            const span = document.createElement('span');
+            span.className = 'material-symbols-outlined data-particle';
+            span.textContent = icons[Math.floor(Math.random() * icons.length)];
+            span.style.setProperty('--angle', `${Math.random() * 360}deg`);
+            span.style.setProperty('--delay', `${Math.random() * 1.2}s`);
+            container.appendChild(span);
+        }
+        
+        const percentageEl = document.getElementById('loader-percentage');
+        const progressBar = document.getElementById('loader-progress-bar');
+        const statusEl = document.getElementById('loader-status');
+        
+        let progress = 0;
+        const totalDuration = 4000; // 4 seconds boot sequence
+        const intervalTime = 30; // Update every 30ms
+        const steps = totalDuration / intervalTime;
+        const increment = 100 / steps;
+        
+        const statuses = [
+            "Initializing Engine Core...",
+            "Loading Neural Mappings...",
+            "Decrypting Schemas...",
+            "Establishing Local Protocols...",
+            "System Ready."
+        ];
+        
+        const timer = setInterval(() => {
+            progress += increment;
+            
+            // Update Text
+            if (progress >= 20 && progress < 40) statusEl.textContent = statuses[1];
+            if (progress >= 40 && progress < 65) statusEl.textContent = statuses[2];
+            if (progress >= 65 && progress < 85) statusEl.textContent = statuses[3];
+            if (progress >= 85) statusEl.textContent = statuses[4];
+            
+            if (progress >= 100) {
+                progress = 100;
+                clearInterval(timer);
+                
+                // Finish Sequence
+                setTimeout(() => {
+                    preloader.classList.add('preloader-hidden');
+                    
+                    // Trigger the main UI staggered animations EXACTLY when fade out completes
+                    setTimeout(() => {
+                        document.body.classList.add('app-loaded');
+                    }, 400); // 400ms matches the CSS transition time
+                    
+                    // Remove from DOM to free resources
+                    setTimeout(() => preloader.remove(), 800);
+                }, 100); // Hold at 100% for 100ms
+            }
+            
+            percentageEl.textContent = Math.floor(progress);
+            progressBar.style.width = `${progress}%`;
+        }, intervalTime);
+    });
+</script>
+</body>
+</html>
