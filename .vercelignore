@@ -1,0 +1,8 @@
+desktop_app.py
+streamlit_app.py
+temp_uploads/
+audit_logs.txt
+__pycache__/
+*.pyc
+.git/
+.gitignore

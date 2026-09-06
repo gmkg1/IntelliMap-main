@@ -11,32 +11,51 @@ from utils.mapper import SmartMapper
 from utils.transformer import DataTransformer
 from utils.metadata_manager import MetadataManager
 
+import tempfile
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+template_folder = os.path.join(base_dir, 'templates')
+static_folder = os.path.join(base_dir, 'static')
+
 if getattr(sys, 'frozen', False):
     template_folder = os.path.join(sys._MEIPASS, 'templates')
     static_folder = os.path.join(sys._MEIPASS, 'static')
-    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
-else:
-    app = Flask(__name__)
+
+app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
 
 app.secret_key = os.environ.get('SECRET_KEY', 'super_secret_key_for_session_management_replace_in_prod')
-UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'temp_uploads')
+
+# In serverless environments like Vercel, the filesystem is read-only except for /tmp
+is_serverless = bool(os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'))
+if is_serverless:
+    UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), 'temp_uploads')
+else:
+    UPLOAD_FOLDER = os.path.join(base_dir, 'temp_uploads')
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB max file upload
 
 # Ensure upload directory exists
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Configure Audit Logging with UTF-8 encoding and duplicate handler guard
+# Configure Audit Logging: Always log to console (visible in Vercel logs), plus file if writable
 audit_logger = logging.getLogger('audit_logger')
 audit_logger.setLevel(logging.INFO)
 if not audit_logger.handlers:
+    formatter = logging.Formatter('%(asctime)s - USER: [%(username)s] - ACTION: %(message)s')
+    
+    # Console output for Vercel/Cloud log stream
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+    audit_logger.addHandler(console_handler)
+    
     try:
-        file_handler = logging.FileHandler('audit_logs.txt', encoding='utf-8')
-        formatter = logging.Formatter('%(asctime)s - USER: [%(username)s] - ACTION: %(message)s')
+        log_file = os.path.join(tempfile.gettempdir() if is_serverless else base_dir, 'audit_logs.txt')
+        file_handler = logging.FileHandler(log_file, encoding='utf-8')
         file_handler.setFormatter(formatter)
         audit_logger.addHandler(file_handler)
     except Exception as e:
-        print(f"Warning: Could not initialize file audit logger: {e}")
+        pass
 
 # Similarity threshold (optimal value for field matching)
 SIMILARITY_THRESHOLD = 70

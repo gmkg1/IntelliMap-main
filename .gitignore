@@ -49,6 +49,7 @@ data/
 *.json
 !sample_*.csv
 !sample_*.json
+!vercel.json
 
 # Logs
 *.log
