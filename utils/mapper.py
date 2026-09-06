@@ -10,29 +10,29 @@ class SmartMapper:
     
     # Common field synonyms for better matching
     FIELD_SYNONYMS = {
-        'email': ['email', 'e-mail', 'mail', 'email address', 'electronic mail', 'e mail'],
-        'phone': ['phone', 'telephone', 'mobile', 'cell', 'contact number', 'phone number', 'tel', 'contact', 'phone no'],
-        'name': ['name', 'full name', 'fullname', 'customer name', 'person name', 'client name'],
-        'first_name': ['first name', 'firstname', 'given name', 'fname', 'first'],
+        'email': ['email', 'e-mail', 'mail', 'email address', 'electronic mail', 'e mail', 'contact email', 'user email', 'work email'],
+        'phone': ['phone', 'telephone', 'mobile', 'cell', 'contact number', 'phone number', 'tel', 'contact', 'phone no', 'tel num', 'tel no', 'contact tel', 'mobile no', 'cellphone'],
+        'name': ['name', 'full name', 'fullname', 'customer name', 'person name', 'client name', 'contact name', 'lead name', 'member name', 'user name'],
+        'first_name': ['first name', 'firstname', 'given name', 'fname', 'first', 'forename'],
         'last_name': ['last name', 'lastname', 'surname', 'family name', 'lname', 'last'],
-        'address': ['address', 'street address', 'location', 'addr', 'street', 'address line'],
-        'city': ['city', 'town', 'municipality'],
-        'state': ['state', 'province', 'region'],
-        'zip': ['zip', 'zipcode', 'postal code', 'postcode', 'zip code', 'postal'],
-        'country': ['country', 'nation'],
-        'date': ['date', 'dt', 'timestamp', 'time', 'datetime'],
-        'id': ['id', 'identifier', 'uid', 'unique id', 'record id', 'customer id', 'user id'],
-        'amount': ['amount', 'total', 'sum', 'value', 'price', 'cost', 'amt'],
-        'quantity': ['quantity', 'qty', 'count', 'number', 'num'],
-        'description': ['description', 'desc', 'details', 'notes', 'comments'],
-        'status': ['status', 'state', 'condition'],
-        'company': ['company', 'organization', 'org', 'business', 'company name'],
-        'title': ['title', 'job title', 'position', 'role'],
-        'department': ['department', 'dept', 'division'],
-        'salary': ['salary', 'wage', 'pay', 'compensation'],
+        'address': ['address', 'street address', 'location', 'addr', 'street', 'address line', 'shipping address', 'billing address'],
+        'city': ['city', 'town', 'municipality', 'metro'],
+        'state': ['state', 'province', 'region', 'territory'],
+        'zip': ['zip', 'zipcode', 'postal code', 'postcode', 'zip code', 'postal', 'pin code', 'pincode'],
+        'country': ['country', 'nation', 'nationality'],
+        'date': ['date', 'dt', 'timestamp', 'time', 'datetime', 'signup date', 'created at', 'created date', 'updated at', 'order date', 'invoice date'],
+        'id': ['id', 'identifier', 'uid', 'unique id', 'record id', 'customer id', 'user id', 'client id', 'account id', 'code', 'key'],
+        'amount': ['amount', 'total', 'sum', 'value', 'price', 'cost', 'amt', 'revenue', 'deal value', 'sales', 'turnover', 'income', 'balance', 'fee', 'rate'],
+        'quantity': ['quantity', 'qty', 'count', 'number', 'num', 'units', 'number of items'],
+        'description': ['description', 'desc', 'details', 'notes', 'comments', 'memo', 'summary'],
+        'status': ['status', 'state', 'condition', 'stage', 'phase'],
+        'company': ['company', 'organization', 'org', 'business', 'company name', 'client', 'account', 'firm', 'vendor', 'supplier', 'corporation', 'employer'],
+        'title': ['title', 'job title', 'position', 'role', 'designation', 'headline'],
+        'department': ['department', 'dept', 'division', 'unit', 'sector'],
+        'salary': ['salary', 'wage', 'pay', 'compensation', 'earnings', 'remuneration'],
         'age': ['age', 'years old', 'yrs'],
         'gender': ['gender', 'sex'],
-        'website': ['website', 'url', 'web', 'site'],
+        'website': ['website', 'url', 'web', 'site', 'link', 'homepage'],
     }
     
     # Common abbreviations
@@ -209,71 +209,68 @@ class SmartMapper:
     
     def _check_synonym_match(self, term1: str, term2: str) -> float:
         """Check if two terms are synonyms and return confidence score"""
-        # Split terms into words for partial matching
         term1_words = set(term1.split())
         term2_words = set(term2.split())
         
-        # Check if both terms appear in the same synonym group
+        # Check if both terms belong to the same synonym category
         for category, synonyms in self.FIELD_SYNONYMS.items():
             # Check for exact matches in the synonym list
-            term1_exact_match = any(term1 == syn for syn in synonyms)
-            term2_exact_match = any(term2 == syn for syn in synonyms)
+            term1_exact = term1 in synonyms
+            term2_exact = term2 in synonyms
             
-            # If both are exact matches, highest confidence
-            if term1_exact_match and term2_exact_match:
+            # If both are exact matches in this category, highest confidence
+            if term1_exact and term2_exact:
                 return 95.0
             
-            # Check if any word from term1 or term2 matches a synonym
-            term1_word_match = any(word in synonyms for word in term1_words)
-            term2_word_match = any(word in synonyms for word in term2_words)
+            # Check if terms match or contain any synonym word/phrase
+            term1_matches = term1_exact or any(syn in term1 or word in synonyms for syn in synonyms for word in term1_words)
+            term2_matches = term2_exact or any(syn in term2 or word in synonyms for syn in synonyms for word in term2_words)
             
-            # If both contain words from the same synonym group, good match
-            # Example: "customer_email" and "email" both contain "email" from email synonyms
-            if term1_word_match and term2_word_match:
-                # Check if they share the key synonym word
-                term1_syn_words = {word for word in term1_words if word in synonyms}
-                term2_syn_words = {word for word in term2_words if word in synonyms}
-                
-                if term1_syn_words & term2_syn_words:  # If they share synonym words
-                    return 90.0  # High confidence for partial synonym matches
+            # If both terms match the same synonym category
+            if term1_matches and term2_matches:
+                if term1_exact or term2_exact:
+                    return 92.0
+                return 88.0
         
         return 0.0
     
     def detect_data_patterns(self, series: pd.Series) -> str:
-        """Detect data type patterns in a column"""
-        # Drop empty values first
-        sample = series.dropna().astype(str)
+        """Detect data type patterns in a column (email, phone, numeric, date, text, empty)"""
+        sample = series.dropna()
+        if sample.dtype == 'object':
+            sample = sample.astype(str).str.strip()
+            sample = sample[~sample.isin(['', 'nan', 'None', 'null', 'NULL', 'N/A', 'n/a', 'NoneType'])]
+            
         if len(sample) == 0:
-            return "text"
+            return "empty"
             
         sample = sample.head(10)
         
-        # Check for email match logic first (most specific)
+        # 1. Check for email pattern
         email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         if sample.apply(lambda x: bool(re.match(email_pattern, str(x)))).all():
             return "email"
             
-        # Check for numeric (including currency)
-        # Remove currency symbols and separators
-        numeric_clean = sample.apply(lambda x: re.sub(r'[$,£€]', '', str(x)).replace(',', ''))
-        try:
-            pd.to_numeric(numeric_clean)
+        # 2. Check for phone pattern
+        phone_pattern = r'^(\+?\d{1,3}[-.\s]?)?(\(?\d{2,4}\)?[-.\s]?)?\d{3,4}[-.\s]?\d{3,4}$'
+        if sample.apply(lambda x: bool(re.match(phone_pattern, str(x).strip()))).all():
+            return "phone"
+
+        # 3. Check for numeric (including currency, commas, percentages)
+        numeric_clean = sample.astype(str).str.replace(r'[$,£€%\s]', '', regex=True).str.replace(',', '')
+        num = pd.to_numeric(numeric_clean, errors='coerce')
+        if num.notna().sum() > 0 and num.notna().sum() >= (len(sample) / 2):
             return "numeric"
-        except:
-            pass
         
-        # Check for dates - STRICT CHECK
+        # 4. Check for dates
         try:
             import warnings
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                # Must actually produce valid dates, not just NaT
                 dates = pd.to_datetime(sample, errors='coerce')
-            
-            # If more than 50% are valid dates, it's a date column
-            if dates.notna().sum() > (len(sample) / 2):
+            if dates.notna().sum() > 0 and dates.notna().sum() >= (len(sample) / 2):
                 return "date"
-        except:
+        except Exception:
             pass
             
         return "text"
@@ -306,8 +303,8 @@ class SmartMapper:
                 
             template_pattern = template_patterns[template_col]
             
-            # Skip generic text matches to avoid bad guesses
-            if template_pattern == "text":
+            # Skip generic text or empty matches to avoid false positives
+            if template_pattern in ["text", "empty"]:
                 continue
             
             for i, raw_col in enumerate(unused_raw):
@@ -315,14 +312,10 @@ class SmartMapper:
                 
                 # Strict pattern matching
                 if template_pattern == raw_pattern:
-                    # Found a match!
                     current_score = enhanced_mappings[template_col][1]
                     
-                    # Only override if we are sure (same pattern)
                     if current_score < 0.6:
                         enhanced_mappings[template_col] = (raw_col, 0.6)  # 60% confidence
-                        
-                        # CRITICAL: Mark this raw column as used so it isn't used again!
                         unused_raw.pop(i)
                         break
         
@@ -330,40 +323,42 @@ class SmartMapper:
         
     def _detect_value_contamination(self, df: pd.DataFrame, sample_size: int = 100) -> Dict[str, List[str]]:
         """
-        Detect if values from one column appear in other columns, which could indicate data quality issues.
-        
-        Args:
-            df: Input DataFrame to analyze
-            sample_size: Number of values to sample from each column (for performance)
-            
-        Returns:
-            Dictionary mapping column names to lists of other columns that share values with it
+        Detect if values from one column appear in other columns.
+        Safely bounds sample size and ignores unhashable types to prevent crashes.
         """
         contamination = {}
-            
-        # Convert all values to strings and take a sample for comparison
         str_samples = {}
+        
         for col in df.columns:
-            # Skip columns with too many unique values (like IDs)
-            if df[col].nunique() > len(df) * 0.9:  # Skip if >90% unique
-                continue
-                
-            # Convert to string and take sample
-            sample = df[col].dropna().astype(str).sample(min(sample_size, len(df[col])))
-            if len(sample) > 0:
+            try:
+                clean_series = df[col].dropna()
+                if len(clean_series) == 0:
+                    continue
+                    
+                # Skip columns with too many unique values (like IDs)
+                if clean_series.nunique() > len(clean_series) * 0.9:
+                    continue
+                    
+                # Convert to clean strings
+                str_series = clean_series.astype(str).str.strip()
+                str_series = str_series[str_series != '']
+                if len(str_series) == 0:
+                    continue
+                    
+                # Take sample safely bounded by actual series length
+                k = min(sample_size, len(str_series))
+                sample = str_series.sample(k)
                 str_samples[col] = set(sample)
+            except Exception:
+                continue
         
         # Compare all pairs of columns
         columns = list(str_samples.keys())
         for i, col1 in enumerate(columns):
             for col2 in columns[i+1:]:
-                # Check for overlapping values
                 common = str_samples[col1] & str_samples[col2]
                 if len(common) > 0:
-                    # Calculate overlap percentage (of the smaller column)
                     overlap_pct = len(common) / min(len(str_samples[col1]), len(str_samples[col2]))
-                    
-                    # Only report significant overlaps (>10%)
                     if overlap_pct > 0.1:
                         if col1 not in contamination:
                             contamination[col1] = []
@@ -374,5 +369,6 @@ class SmartMapper:
                         contamination[col2].append(f"{col1} ({int(overlap_pct*100)}% overlap)")
         
         return contamination
+
         
 

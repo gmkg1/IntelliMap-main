@@ -347,8 +347,8 @@
                     </h3>
                     <label for="raw-file" class="upload-zone border-2 border-dashed border-outline-variant rounded-lg p-margin flex flex-col items-center justify-center text-center cursor-pointer h-48 bg-surface-container-lowest">
                         <span class="material-symbols-outlined text-4xl text-outline mb-2">upload_file</span>
-                        <p class="font-body-md text-body-md text-on-surface-variant" id="raw-file-name">Drag &amp; drop CSV/XLSX here</p>
-                        <p class="font-label-caps text-label-caps text-outline mt-2">or click to browse</p>
+                        <p class="font-body-md text-body-md text-on-surface-variant" id="raw-file-name">Drag &amp; drop CSV / Excel / JSON here</p>
+                        <p class="font-label-caps text-label-caps text-outline mt-2">or click to browse (.csv, .xlsx, .xls, .json)</p>
                         <input type="file" id="raw-file" accept=".csv, .xlsx, .xls, .json" class="hidden-visually">
                     </label>
                 </div>
@@ -361,8 +361,8 @@
                     </h3>
                     <label for="template-file" class="upload-zone border-2 border-dashed border-outline-variant rounded-lg p-margin flex flex-col items-center justify-center text-center cursor-pointer h-48 bg-surface-container-lowest">
                         <span class="material-symbols-outlined text-4xl text-outline mb-2">note_add</span>
-                        <p class="font-body-md text-body-md text-on-surface-variant" id="template-file-name">Drag &amp; drop Target Schema</p>
-                        <p class="font-label-caps text-label-caps text-outline mt-2">or click to browse</p>
+                        <p class="font-body-md text-body-md text-on-surface-variant" id="template-file-name">Drag &amp; drop Target Schema (CSV / Excel / JSON)</p>
+                        <p class="font-label-caps text-label-caps text-outline mt-2">or click to browse (.csv, .xlsx, .xls, .json)</p>
                         <input type="file" id="template-file" accept=".csv, .xlsx, .xls, .json" class="hidden-visually">
                     </label>
                 </div>
@@ -390,14 +390,14 @@
                     </div>
                     <div class="flex flex-col gap-2">
                         <label for="username" class="font-label-caps text-label-caps text-outline">Your Name / User ID</label>
-                        <input type="text" id="username" class="bg-surface border border-outline-variant rounded p-2 text-on-surface focus:border-primary outline-none" placeholder="For audit logs">
+                        <input type="text" id="username" value="Pitch Demo" class="bg-surface border border-outline-variant rounded p-2 text-on-surface focus:border-primary outline-none" placeholder="For audit logs">
                     </div>
                     <div class="flex flex-col gap-2">
                         <label for="output-format" class="font-label-caps text-label-caps text-outline">Output Format</label>
                         <select id="output-format" class="bg-surface border border-outline-variant rounded p-2 text-on-surface focus:border-primary outline-none">
-                            <option value="csv">CSV</option>
-                            <option value="excel" selected>Excel</option>
-                            <option value="json">JSON</option>
+                            <option value="excel" selected>Excel (.xlsx)</option>
+                            <option value="csv">CSV (.csv)</option>
+                            <option value="json">JSON (.json)</option>
                         </select>
                     </div>
                 </div>
@@ -443,7 +443,15 @@
                 </table>
             </div>
             
-            <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-end">
+            <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center flex-wrap gap-4">
+                <div class="flex items-center gap-2">
+                    <label for="transform-format" class="font-label-caps text-xs text-outline font-semibold">Export Format:</label>
+                    <select id="transform-format" class="bg-surface border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:border-primary outline-none shadow-sm cursor-pointer">
+                        <option value="excel" selected>Excel (.xlsx)</option>
+                        <option value="csv">CSV (.csv)</option>
+                        <option value="json">JSON (.json)</option>
+                    </select>
+                </div>
                 <button id="transform-btn" class="gradient-btn text-on-primary px-xl py-3 rounded-full hover-lift font-headline-sm text-headline-sm flex items-center gap-3 shadow-md">
                     ✨ Transform Data
                 </button>
@@ -469,6 +477,26 @@
                     <span class="font-label-caps text-label-caps text-outline">Completeness</span>
                 </div>
             </div>
+
+            <!-- Live Transformed Data Preview -->
+            <div id="preview-container" class="p-md border-t border-outline-variant bg-surface-container-lowest flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-headline-sm text-base font-bold text-on-surface flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-xl">preview</span>
+                        Transformed Data Preview (First 5 Rows)
+                    </h4>
+                    <span class="text-xs text-outline font-label-caps bg-surface-container px-2 py-1 rounded">Live Client Preview</span>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-outline-variant bg-surface max-h-64 shadow-inner">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead class="bg-surface-container-low font-label-caps text-outline sticky top-0" id="preview-thead">
+                        </thead>
+                        <tbody id="preview-tbody" class="font-mono text-on-surface divide-y divide-outline-variant/30">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="p-md bg-surface-container-lowest border-t border-outline-variant flex justify-center">
                 <a id="download-link" href="#" class="gradient-btn text-on-primary px-xl py-3 rounded-full hover-lift font-headline-sm text-headline-sm flex items-center gap-3 shadow-md no-underline">
                     ⬇️ Download Data
@@ -490,7 +518,7 @@
             nameElement.textContent = this.files[0].name;
             nameElement.classList.add('text-primary', 'font-semibold');
         } else {
-            nameElement.textContent = 'Drag & drop CSV/XLSX here';
+            nameElement.textContent = 'Drag & drop CSV / Excel / JSON here';
             nameElement.classList.remove('text-primary', 'font-semibold');
         }
     });
@@ -501,7 +529,7 @@
             nameElement.textContent = this.files[0].name;
             nameElement.classList.add('text-primary', 'font-semibold');
         } else {
-            nameElement.textContent = 'Drag & drop Target Schema here';
+            nameElement.textContent = 'Drag & drop Target Schema (CSV / Excel / JSON)';
             nameElement.classList.remove('text-primary', 'font-semibold');
         }
     });
